@@ -10,6 +10,7 @@
     "module": "esnext",
     "target": "esnext",
     "types": [],
+    "typeRoots": ["./node_modules/@types"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -43,9 +44,6 @@
 
     "moduleResolution": "node",
     "allowJs": true,
-    "esModuleInterop": true,
-
-    "noImplicitAny": false,
-    "allowImportingTsExtensions": false
+    "esModuleInterop": true
   }
 }
