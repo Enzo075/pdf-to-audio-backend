@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as pdfService from "../services/pdfService";
+import * as pdfService from "../services/pdfService.js";
 
 export const uploadAndExtract = async (
   req: Request,
@@ -7,16 +7,11 @@ export const uploadAndExtract = async (
 ): Promise<void> => {
   try {
     if (!req.file) {
-      res.status(400).json({ error: "Nenhum arquivo PDF enviado." });
+      res.status(400).json({ error: "Nenhum arquivo enviado." });
       return;
     }
-
-    const extraction = await pdfService.extractText(req.file.buffer);
-
-    res.status(200).json({
-      message: "Texto extraído com sucesso",
-      data: extraction,
-    });
+    const result = await pdfService.extractText(req.file.buffer);
+    res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
