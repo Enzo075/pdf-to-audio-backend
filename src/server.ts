@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import pdfRoutes from "./routes/pdfRoutes";
+import pdfRoutes from "./routes/pdfRoutes.js";
 
 dotenv.config();
 const app = express();

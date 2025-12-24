@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as pdfService from "../services/pdfService";
+import * as pdfService from "../services/pdfService.js";
 
 export const uploadAndExtract = async (
   req: Request,
