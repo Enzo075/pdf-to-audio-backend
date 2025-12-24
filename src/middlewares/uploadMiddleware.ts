@@ -1,6 +1,10 @@
 import multer from "multer";
 import type { Request } from "express";
 
+interface MulterRequest extends Request {
+  file?: Express.Multer.File;
+}
+
 const storage = multer.memoryStorage();
 
 const upload = multer({
