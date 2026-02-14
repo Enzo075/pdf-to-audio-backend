@@ -12,19 +12,32 @@ export const extractText = async (buffer: Buffer): Promise<any> => {
       const lines: { text: string; y: number }[] = [];
 
       let lastY: number | null = null;
+      let lastX: number | null = null;
       let currentLine = "";
 
       for (const item of textContent.items) {
         const y = item.transform[5];
+        const x = item.transform[4];
 
-        if (lastY === y || lastY === null) {
-          currentLine += item.str + " ";
+        if (lastY === null || y === lastY) {
+          if (lastX !== null) {
+            const gap = x - lastX;
+
+            if (gap < 5) {
+              currentLine += item.str;
+            } else {
+              currentLine += " " + item.str;
+            }
+          } else {
+            currentLine += item.str;
+          }
         } else {
           lines.push({ text: currentLine.trim(), y: lastY });
-          currentLine = item.str + " ";
+          currentLine = item.str;
         }
 
         lastY = y;
+        lastX = x + item.width;
       }
 
       if (currentLine && lastY !== null) {
@@ -44,7 +57,7 @@ export const extractText = async (buffer: Buffer): Promise<any> => {
 
         const verticalGap = Math.abs(current.y - next.y);
 
-        if (verticalGap > 15) {
+        if (verticalGap > 25) {
           paragraphs.push(currentParagraph.trim());
           currentParagraph = "";
         }
