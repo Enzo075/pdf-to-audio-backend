@@ -8,7 +8,6 @@ export const generateAudio = async (
   try {
     const { text, playbackRate, provider, apiKey } = req.body;
 
-    // Validações
     if (!text || typeof text !== "string") {
       res
         .status(400)
@@ -17,11 +16,9 @@ export const generateAudio = async (
     }
 
     if (!playbackRate || typeof playbackRate !== "number") {
-      res
-        .status(400)
-        .json({
-          error: "Campo 'playbackRate' é obrigatório e deve ser number.",
-        });
+      res.status(400).json({
+        error: "Campo 'playbackRate' é obrigatório e deve ser number.",
+      });
       return;
     }
 
@@ -43,7 +40,6 @@ export const generateAudio = async (
       return;
     }
 
-    // Gera áudio
     const audioBuffer = await ttsService.generateSpeech(
       text,
       playbackRate,
@@ -51,7 +47,6 @@ export const generateAudio = async (
       apiKey,
     );
 
-    // Retorna áudio
     res.set({
       "Content-Type": "audio/mpeg",
       "Content-Length": audioBuffer.length,
