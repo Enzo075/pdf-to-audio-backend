@@ -10,9 +10,6 @@ export interface TTSRequest {
   apiKey: string;
 }
 
-/**
- * Gera áudio com OpenAI TTS
- */
 const generateWithOpenAI = async (
   text: string,
   speed: number,
@@ -31,9 +28,6 @@ const generateWithOpenAI = async (
   return Buffer.from(await mp3.arrayBuffer());
 };
 
-/**
- * Gera áudio com Google Cloud TTS
- */
 const generateWithGoogle = async (
   text: string,
   speed: number,
@@ -60,10 +54,6 @@ const generateWithGoogle = async (
   return Buffer.from(response.data.audioContent, "base64");
 };
 
-/**
- * Gera áudio com Azure TTS
- * apiKey pode ser: "KEY" ou "KEY|REGION" ou "KEY|https://region.tts.speech.microsoft.com"
- */
 const generateWithAzure = async (
   text: string,
   speed: number,
@@ -87,11 +77,10 @@ const generateWithAzure = async (
     }
   }
 
-  // Azure usa SSML para controlar velocidade
   const ssml = `
     <speak version='1.0' xml:lang='pt-BR'>
       <voice xml:lang='pt-BR' name='pt-BR-FranciscaNeural'>
-        <prosody rate='${speed * 100}%'>
+        <prosody rate='${speed}'>
           ${text}
         </prosody>
       </voice>
@@ -114,9 +103,6 @@ const generateWithAzure = async (
   return Buffer.from(response.data);
 };
 
-/**
- * Função principal que roteia para o provider correto
- */
 export const generateSpeech = async (
   text: string,
   speed: number,
