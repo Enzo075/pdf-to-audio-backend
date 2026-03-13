@@ -9,6 +9,15 @@ export interface TTSRequest {
   provider: TTSProvider;
   apiKey: string;
 }
+const sanitizeForSSML = (text: string): string => {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+    .trim();
+};
 
 const generateWithOpenAI = async (
   text: string,
@@ -77,11 +86,13 @@ const generateWithAzure = async (
     }
   }
 
+  const safeText = sanitizeForSSML(text);
+
   const ssml = `
     <speak version='1.0' xml:lang='pt-BR'>
       <voice xml:lang='pt-BR' name='pt-BR-FranciscaNeural'>
         <prosody rate='${speed}'>
-          ${text}
+          ${safeText}
         </prosody>
       </voice>
     </speak>

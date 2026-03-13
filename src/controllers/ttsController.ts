@@ -8,10 +8,11 @@ export const generateAudio = async (
   try {
     const { text, playbackRate, provider, apiKey } = req.body;
 
-    if (!text || typeof text !== "string") {
-      res
-        .status(400)
-        .json({ error: "Campo 'text' é obrigatório e deve ser string." });
+    if (!text || typeof text !== "string" || text.trim().length === 0) {
+      res.status(400).json({
+        error:
+          "Campo 'text' é obrigatório, deve ser string e não pode ser vazio.",
+      });
       return;
     }
 
