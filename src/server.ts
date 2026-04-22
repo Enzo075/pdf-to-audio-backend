@@ -1,25 +1,28 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express, { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import pdfRoutes from "./routes/pdfRoutes.js";
 import ttsRoutes from "./routes/ttsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 
-dotenv.config();
-
 const app = express();
 
 const corsOptions = {
-  // Substitua pela URL exata do seu frontend rodando no Vite
   origin: "http://localhost:5173",
-  credentials: true, // Permite o envio de cookies/headers de autenticação
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+app.post("/api/auth/logout", (_req, res) => {
+  res.status(200).json({ message: "Logout realizado com sucesso" });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/pdf", authMiddleware, pdfRoutes);

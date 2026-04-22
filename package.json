@@ -29,6 +29,7 @@
     "openai": "^6.22.0",
     "pdf-parse": "^1.1.1",
     "pg": "^8.20.0",
+    "resend": "^6.10.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
