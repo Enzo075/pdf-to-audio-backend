@@ -3,6 +3,9 @@ dotenv.config();
 
 import express, { Request, Response } from "express";
 import cors from "cors";
+import passport from "passport";
+import { initPassport } from "./lib/passport.js";
+import cookieParser from "cookie-parser";
 import pdfRoutes from "./routes/pdfRoutes.js";
 import ttsRoutes from "./routes/ttsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -10,8 +13,10 @@ import { authMiddleware } from "./middlewares/authMiddleware.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -19,8 +24,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
+
+initPassport();
+app.use(passport.initialize());
 
 app.post("/api/auth/logout", (_req, res) => {
+  res.clearCookie("refreshToken");
   res.status(200).json({ message: "Logout realizado com sucesso" });
 });
 

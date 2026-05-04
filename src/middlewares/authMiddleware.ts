@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../lib/jwt.js";
 
+// Extende os tipos globais do Express para incluir user e suportar passport
 declare global {
   namespace Express {
     interface User {

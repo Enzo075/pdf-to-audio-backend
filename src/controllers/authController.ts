@@ -74,7 +74,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 // --- REFRESH TOKEN ---
 export const refresh = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { refreshToken } = req.body;
+    // Tenta ler o refreshToken do cookie httpOnly (OAuth) ou do body (legado)
+    const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!refreshToken) {
       res.status(400).json({ error: "refreshToken é obrigatório." });
