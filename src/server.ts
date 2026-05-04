@@ -1,18 +1,42 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express, { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import passport from "passport";
+import { initPassport } from "./lib/passport.js";
+import cookieParser from "cookie-parser";
 import pdfRoutes from "./routes/pdfRoutes.js";
 import ttsRoutes from "./routes/ttsRoutes.js";
-
-dotenv.config();
+import authRoutes from "./routes/authRoutes.js";
+import { authMiddleware } from "./middlewares/authMiddleware.js";
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+app.set("trust proxy", 1);
 
-app.use("/api/pdf", pdfRoutes);
-app.use("/api/tts", ttsRoutes);
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
+
+initPassport();
+app.use(passport.initialize());
+
+app.post("/api/auth/logout", (_req, res) => {
+  res.clearCookie("refreshToken");
+  res.status(200).json({ message: "Logout realizado com sucesso" });
+});
+
+app.use("/api/auth", authRoutes);
+app.use("/api/pdf", authMiddleware, pdfRoutes);
+app.use("/api/tts", authMiddleware, ttsRoutes);
 
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "OK", message: "Servidor TTS ativo" });

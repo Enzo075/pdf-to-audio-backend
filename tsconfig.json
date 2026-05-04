@@ -44,7 +44,8 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
 
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
     "allowJs": true,
     "esModuleInterop": true
   },
