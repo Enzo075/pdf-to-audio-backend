@@ -11,6 +11,8 @@ import ttsRoutes from "./routes/ttsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { authMiddleware } from "./middlewares/authMiddleware.js";
 
+import bookRoutes from "./routes/bookRoutes.js";
+
 const app = express();
 
 app.set("trust proxy", 1);
@@ -18,7 +20,7 @@ app.set("trust proxy", 1);
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
@@ -37,6 +39,8 @@ app.post("/api/auth/logout", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/pdf", authMiddleware, pdfRoutes);
 app.use("/api/tts", authMiddleware, ttsRoutes);
+
+app.use("/api/books", authMiddleware, bookRoutes);
 
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "OK", message: "Servidor TTS ativo" });

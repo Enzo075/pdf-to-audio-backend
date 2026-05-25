@@ -14,4 +14,22 @@ model User {
   passwordResetExpires DateTime?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
+  books                Book[]
+}
+
+model Book {
+  id           String   @id @default(cuid())
+  title        String
+  fileUrl      String
+  coverUrl     String?
+  totalLines   Int      @default(0)
+  totalPages   Int      @default(0)
+  lastLineRead Int      @default(0)
+  lastPageRead Int      @default(0)
+  position     Int      @default(0)
+  isFavorite   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
